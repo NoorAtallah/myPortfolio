@@ -90,7 +90,7 @@ const Projects = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 overflow-y-auto"
+        className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto"
         onClick={() => setSelectedId(null)}
       >
         <motion.div
@@ -98,31 +98,31 @@ const Projects = () => {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 100, scale: 0.9 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          className="bg-[#0A1235] border border-white/10 rounded-xl overflow-hidden max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-xl shadow-[#D87EE8]/20"
+          className="bg-[#0A1235] border border-white/10 rounded-xl overflow-hidden max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto shadow-xl shadow-[#D87EE8]/20 m-2"
           onClick={e => e.stopPropagation()}
         >
           {/* Project Image Header */}
           <div 
-            className="h-64 bg-cover bg-center" 
+            className="h-48 sm:h-56 md:h-64 bg-cover bg-center" 
             style={{ 
               backgroundImage: `url(${project.image})`, 
               backgroundColor: project.placeholder ? 'transparent' : '#D87EE8',
               backgroundImage: project.image ? `url(${project.image})` : project.placeholder
             }}
           >
-            <div className="h-full w-full bg-black/40 p-6 flex flex-col justify-end backdrop-blur-sm">
-              <h3 className="text-3xl font-bold text-white mb-2 drop-shadow-md">{project.title}</h3>
-              <div className="flex flex-wrap gap-2">
+            <div className="h-full w-full bg-black/40 p-4 sm:p-6 flex flex-col justify-end backdrop-blur-sm">
+              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2 drop-shadow-md">{project.title}</h3>
+              <div className="flex flex-wrap gap-1 sm:gap-2">
                 {project.technologies.slice(0, 3).map((tech, index) => (
                   <span 
                     key={index}
-                    className="px-3 py-1 bg-black/40 backdrop-blur-sm rounded-full text-white text-sm font-medium border border-white/10"
+                    className="px-2 sm:px-3 py-1 bg-black/40 backdrop-blur-sm rounded-full text-white text-xs sm:text-sm font-medium border border-white/10"
                   >
                     {tech}
                   </span>
                 ))}
                 {project.technologies.length > 3 && (
-                  <span className="px-3 py-1 bg-black/40 backdrop-blur-sm rounded-full text-white text-sm font-medium border border-white/10">
+                  <span className="px-2 sm:px-3 py-1 bg-black/40 backdrop-blur-sm rounded-full text-white text-xs sm:text-sm font-medium border border-white/10">
                     +{project.technologies.length - 3} more
                   </span>
                 )}
@@ -131,21 +131,21 @@ const Projects = () => {
           </div>
           
           {/* Project Content */}
-          <div className="p-6">
-            <div className="mb-8">
+          <div className="p-4 sm:p-6">
+            <div className="mb-6 sm:mb-8">
               <h4 className="text-lg font-bold text-white mb-2">Project Overview</h4>
-              <p className="text-white/80">
+              <p className="text-white/80 text-sm sm:text-base leading-relaxed">
                 {project.longDescription}
               </p>
             </div>
             
-            <div className="mb-8">
+            <div className="mb-6 sm:mb-8">
               <h4 className="text-lg font-bold text-white mb-2">Technologies Used</h4>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1 sm:gap-2">
                 {project.technologies.map((tech, index) => (
                   <span 
                     key={index}
-                    className="px-3 py-1 bg-[#D87EE8]/20 text-[#FF9EFF] rounded-full text-sm font-medium border border-[#D87EE8]/30"
+                    className="px-2 sm:px-3 py-1 bg-[#D87EE8]/20 text-[#FF9EFF] rounded-full text-xs sm:text-sm font-medium border border-[#D87EE8]/30"
                   >
                     {tech}
                   </span>
@@ -153,13 +153,13 @@ const Projects = () => {
               </div>
             </div>
             
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               {project.liveLink && (
                 <a 
                   href={project.liveLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-6 py-3 bg-[#FF9EFF] hover:bg-[#FF9EFF]/80 text-[#0A1235] rounded-lg font-bold flex items-center transition-colors duration-300 shadow-lg shadow-[#FF9EFF]/20"
+                  className="px-4 sm:px-6 py-3 bg-[#FF9EFF] hover:bg-[#FF9EFF]/80 text-[#0A1235] rounded-lg font-bold flex items-center justify-center transition-colors duration-300 shadow-lg shadow-[#FF9EFF]/20 text-sm sm:text-base"
                 >
                   <ExternalLink size={16} className="mr-2" /> Visit Website
                 </a>
@@ -181,7 +181,7 @@ const Projects = () => {
   const yBubble3 = useTransform(scrollYProgress, [0, 1], [0, -150]);
 
   return (
-    <section id="projects" className="py-20 min-h-screen bg-gradient-to-b from-[#0A1235] to-[#192965] relative overflow-hidden">
+    <section id="projects" className="py-16 sm:py-20 min-h-screen bg-gradient-to-b from-[#0A1235] to-[#192965] relative overflow-hidden">
       {/* Noise texture overlay */}
       <div className="absolute inset-0 z-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')]"></div>
       
@@ -189,27 +189,27 @@ const Projects = () => {
       <div className="absolute inset-0 z-0 overflow-hidden">
         <motion.div 
           style={{ y: yBubble1 }}
-          className="absolute top-20 left-[5%] w-64 h-64 rounded-full bg-[#D87EE8]/10 blur-2xl"
+          className="absolute top-20 left-[5%] w-32 sm:w-48 md:w-64 h-32 sm:h-48 md:h-64 rounded-full bg-[#D87EE8]/10 blur-2xl"
         />
         <motion.div 
           style={{ y: yBubble2 }}
-          className="absolute top-[40%] right-[15%] w-80 h-80 rounded-full bg-[#7A93D8]/15 blur-3xl"
+          className="absolute top-[40%] right-[15%] w-40 sm:w-60 md:w-80 h-40 sm:h-60 md:h-80 rounded-full bg-[#7A93D8]/15 blur-3xl"
         />
         <motion.div 
           style={{ y: yBubble3 }}
-          className="absolute bottom-[10%] left-[20%] w-72 h-72 rounded-full bg-[#FF9EFF]/10 blur-3xl"
+          className="absolute bottom-[10%] left-[20%] w-36 sm:w-54 md:w-72 h-36 sm:h-54 md:h-72 rounded-full bg-[#FF9EFF]/10 blur-3xl"
         />
       </div>
       
-      <div className="container mx-auto px-4 relative z-10" ref={containerRef}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10" ref={containerRef}>
         {/* Section Header */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
+        <div className="max-w-3xl mx-auto text-center mb-12 sm:mb-16">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl font-bold mb-6 text-white inline-block drop-shadow-md"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-white inline-block drop-shadow-md"
           >
             My <span className="text-[#FF9EFF]">Portfolio</span>
           </motion.h2>
@@ -218,7 +218,7 @@ const Projects = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-lg text-white/80"
+            className="text-base sm:text-lg text-white/80 px-4"
           >
             Explore my latest work — from tax calculators to corporate websites and travel platforms.
           </motion.p>
@@ -230,37 +230,37 @@ const Projects = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="mb-24"
+          className="mb-16 sm:mb-20 lg:mb-24"
         >
-          <div className="relative overflow-hidden rounded-2xl">
+          <div className="relative overflow-hidden rounded-xl sm:rounded-2xl">
             {/* Background with gradient overlay */}
             <div 
-              className="relative h-96 md:h-[500px] w-full bg-cover bg-center" 
+              className="relative h-80 sm:h-96 md:h-[500px] w-full bg-cover bg-center" 
               style={{ 
                 backgroundImage: `url(${projects[0].image})`,
                 backgroundImage: projects[0].image ? `url(${projects[0].image})` : projects[0].placeholder
               }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0A1235]/90 to-transparent">
-                <div className="h-full flex flex-col justify-center py-12 px-6 md:px-12 max-w-2xl">
-                  <h3 className="text-4xl font-bold text-white mb-4 drop-shadow-md">{projects[0].title}</h3>
-                  <p className="text-white/90 text-lg mb-6">{projects[0].longDescription}</p>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0A1235]/90 via-[#0A1235]/70 sm:via-[#0A1235]/50 to-transparent">
+                <div className="h-full flex flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 md:px-12 max-w-full sm:max-w-2xl">
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4 drop-shadow-md leading-tight">{projects[0].title}</h3>
+                  <p className="text-white/90 text-sm sm:text-base lg:text-lg mb-4 sm:mb-6 leading-relaxed">{projects[0].longDescription}</p>
                   
-                  <div className="flex flex-wrap gap-2 mb-8">
+                  <div className="flex flex-wrap gap-1 sm:gap-2 mb-6 sm:mb-8">
                     {projects[0].technologies.map((tech, index) => (
                       <span 
                         key={index}
-                        className="px-3 py-1 bg-black/40 backdrop-blur-sm rounded-full text-white text-sm font-medium border border-white/10"
+                        className="px-2 sm:px-3 py-1 bg-black/40 backdrop-blur-sm rounded-full text-white text-xs sm:text-sm font-medium border border-white/10"
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
                   
-                  <div className="flex gap-4">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <button 
                       onClick={() => setSelectedId(projects[0].id)}
-                      className="px-6 py-3 rounded-lg bg-[#FF9EFF] hover:bg-[#FF9EFF]/80 text-[#0A1235] font-bold transition-all duration-300 flex items-center shadow-lg shadow-[#FF9EFF]/30"
+                      className="w-full sm:w-auto px-4 sm:px-6 py-3 rounded-lg bg-[#FF9EFF] hover:bg-[#FF9EFF]/80 text-[#0A1235] font-bold transition-all duration-300 flex items-center justify-center shadow-lg shadow-[#FF9EFF]/30 text-sm sm:text-base"
                     >
                       View Details <ChevronRight className="ml-2" size={16} />
                     </button>
@@ -270,7 +270,7 @@ const Projects = () => {
                         href={projects[0].liveLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-6 py-3 rounded-lg bg-transparent border border-white/20 hover:bg-white/10 text-white font-medium transition-all duration-300 flex items-center"
+                        className="w-full sm:w-auto px-4 sm:px-6 py-3 rounded-lg bg-transparent border border-white/20 hover:bg-white/10 text-white font-medium transition-all duration-300 flex items-center justify-center text-sm sm:text-base"
                       >
                         Visit Site <ExternalLink className="ml-2" size={16} />
                       </a>
@@ -283,19 +283,19 @@ const Projects = () => {
         </motion.div>
         
         {/* Projects Horizontal Scroll */}
-        <div className="mb-20">
+        <div className="mb-16 sm:mb-20">
           <motion.h3 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-2xl font-bold text-white mb-8"
+            className="text-xl sm:text-2xl font-bold text-white mb-6 sm:mb-8 px-2 sm:px-0"
           >
             Recent <span className="text-[#FF9EFF]">Projects</span>
           </motion.h3>
           
           <div className="relative">
-            <div className="overflow-x-auto pb-8 -mx-4 px-4 scrollbar-hide">
-              <div className="flex space-x-6" style={{ width: 'max-content' }}>
+            <div className="overflow-x-auto pb-6 sm:pb-8 -mx-4 px-4 scrollbar-hide">
+              <div className="flex space-x-4 sm:space-x-6" style={{ width: 'max-content' }}>
                 {projects.slice(1, 5).map((project) => (
                   <motion.div
                     key={project.id}
@@ -305,21 +305,21 @@ const Projects = () => {
                     whileHover={{ y: -10 }}
                     transition={{ duration: 0.4 }}
                     onClick={() => setSelectedId(project.id)}
-                    className="w-[300px] flex-shrink-0 rounded-xl overflow-hidden cursor-pointer group"
+                    className="w-[280px] sm:w-[300px] flex-shrink-0 rounded-xl overflow-hidden cursor-pointer group"
                   >
                     {/* Project card with glass effect */}
                     <div className="bg-black/30 backdrop-blur-sm h-full border border-white/10 rounded-xl overflow-hidden">
                       <div 
-                        className="h-40 relative overflow-hidden"
+                        className="h-32 sm:h-40 relative overflow-hidden"
                         style={{ 
                           backgroundImage: project.image ? `url(${project.image})` : project.placeholder,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center'
                         }}
                       >
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-3 sm:p-4">
                           <div>
-                            <h4 className="text-white font-bold">{project.title}</h4>
+                            <h4 className="text-white font-bold text-sm sm:text-base">{project.title}</h4>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {project.technologies.slice(0, 2).map((tech, index) => (
                                 <span key={index} className="text-xs text-white/80">{tech}</span>
@@ -333,14 +333,14 @@ const Projects = () => {
                         
                         {/* Hover overlay */}
                         <div className="absolute inset-0 bg-[#7A93D8]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                          <span className="px-4 py-2 bg-black/50 backdrop-blur-sm rounded-full text-white text-sm">View Project</span>
+                          <span className="px-3 sm:px-4 py-2 bg-black/50 backdrop-blur-sm rounded-full text-white text-xs sm:text-sm">View Project</span>
                         </div>
                       </div>
                       
-                      <div className="p-4">
-                        <p className="text-white/80 text-sm mb-3 line-clamp-3">{project.description}</p>
-                        <div className="flex items-center text-[#FF9EFF] text-sm font-medium">
-                          Explore <ArrowRight size={14} className="ml-1" />
+                      <div className="p-3 sm:p-4">
+                        <p className="text-white/80 text-xs sm:text-sm mb-3 line-clamp-3 leading-relaxed">{project.description}</p>
+                        <div className="flex items-center text-[#FF9EFF] text-xs sm:text-sm font-medium">
+                          Explore <ArrowRight size={12} className="ml-1" />
                         </div>
                       </div>
                     </div>
@@ -357,17 +357,17 @@ const Projects = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-2xl font-bold text-white mb-12"
+            className="text-xl sm:text-2xl font-bold text-white mb-8 sm:mb-12 px-2 sm:px-0"
           >
             Project <span className="text-[#FF9EFF]">Timeline</span>
           </motion.h3>
           
           <div className="relative">
             {/* Vertical timeline line */}
-            <div className="absolute left-[15px] md:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#D87EE8] via-[#7A93D8] to-[#0A1235] transform md:translate-x-[-1px]"></div>
+            <div className="absolute left-[15px] sm:left-[15px] lg:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#D87EE8] via-[#7A93D8] to-[#0A1235] transform lg:translate-x-[-1px]"></div>
             
             {/* Timeline items */}
-            <div className="space-y-24">
+            <div className="space-y-12 sm:space-y-16 lg:space-y-24">
               {projects.map((project, index) => (
                 <motion.div
                   key={project.id}
@@ -375,34 +375,34 @@ const Projects = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className={`relative flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+                  className={`relative flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}
                 >
                   {/* Timeline node */}
-                  <div className="absolute left-0 md:left-1/2 top-0 w-8 h-8 rounded-full bg-[#FF9EFF] border-4 border-[#0A1235] shadow-lg transform translate-x-[-14px] md:translate-x-[-16px] z-10"></div>
+                  <div className="absolute left-0 sm:left-0 lg:left-1/2 top-0 w-8 h-8 rounded-full bg-[#FF9EFF] border-4 border-[#0A1235] shadow-lg transform translate-x-[-14px] lg:translate-x-[-16px] z-10"></div>
                   
                   {/* Content */}
-                  <div className="ml-12 md:ml-0 md:w-1/2 md:px-8">
+                  <div className="ml-8 sm:ml-12 lg:ml-0 lg:w-1/2 lg:px-8">
                     <div
                       onClick={() => setSelectedId(project.id)}
-                      className={`bg-black/20 backdrop-blur-sm rounded-xl overflow-hidden border border-white/10 shadow-xl cursor-pointer transform transition-transform duration-300 hover:scale-[1.03] ${
-                        index % 2 === 0 ? 'md:mr-4' : 'md:ml-4'
+                      className={`bg-black/20 backdrop-blur-sm rounded-xl overflow-hidden border border-white/10 shadow-xl cursor-pointer transform transition-transform duration-300 hover:scale-[1.02] lg:hover:scale-[1.03] ${
+                        index % 2 === 0 ? 'lg:mr-4' : 'lg:ml-4'
                       }`}
                     >
-                      <div className="p-6">
-                        <h4 className="text-2xl font-bold text-white mb-2">{project.title}</h4>
-                        <p className="text-white/80 mb-4">{project.description}</p>
-                        <div className="flex flex-wrap gap-2 mb-4">
+                      <div className="p-4 sm:p-6">
+                        <h4 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-2">{project.title}</h4>
+                        <p className="text-white/80 mb-3 sm:mb-4 text-sm sm:text-base leading-relaxed">{project.description}</p>
+                        <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-4">
                           {project.technologies.slice(0, 3).map((tech, index) => (
                             <span 
                               key={index}
-                              className="px-3 py-1 bg-[#D87EE8]/10 text-[#FF9EFF] rounded-full text-sm"
+                              className="px-2 sm:px-3 py-1 bg-[#D87EE8]/10 text-[#FF9EFF] rounded-full text-xs sm:text-sm"
                             >
                               {tech}
                             </span>
                           ))}
                         </div>
-                        <button className="text-[#FF9EFF] font-medium flex items-center">
-                          View Project <ChevronRight size={16} className="ml-1" />
+                        <button className="text-[#FF9EFF] font-medium flex items-center text-sm sm:text-base">
+                          View Project <ChevronRight size={14} className="ml-1" />
                         </button>
                       </div>
                     </div>
