@@ -12,6 +12,11 @@ const BlackHolePortfolio = () => {
   const [timeSpeed, setTimeSpeed] = useState(1);
   const [selectedProject, setSelectedProject] = useState(null);
   
+  // Custom cursor state
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const cursorRef = useRef({ x: 0, y: 0 });
+  
   // Use refs to avoid transition flashing
   const transitionTimeoutRef = useRef(null);
   const phaseUpdateTimeoutRef = useRef(null);
@@ -39,6 +44,27 @@ const BlackHolePortfolio = () => {
     if (value < 0.75) return { phase: 'horizon', speed: 0.3 };
     if (value < 0.95) return { phase: 'inside', speed: 0.1 };
     return { phase: 'singularity', speed: 0.05 };
+  }, []);
+
+  // Custom cursor tracking
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      cursorRef.current = { x: e.clientX, y: e.clientY };
+      setCursorPosition({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleMouseEnter = () => setIsHovering(false);
+    const handleMouseLeave = () => setIsHovering(false);
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseenter', handleMouseEnter);
+    window.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseenter', handleMouseEnter);
+      window.removeEventListener('mouseleave', handleMouseLeave);
+    };
   }, []);
 
   // Separate effect for scroll tracking - removed journeyPhase dependency
@@ -175,7 +201,7 @@ const BlackHolePortfolio = () => {
     scene.add(accretionDisk);
 
     // Optimized particles spiraling into black hole
-  
+    // const isMobile = window.innerWidth < 768;
     const particleCount = isMobile ? 1000 : 2000; // Reduce particles on mobile
     const particlesGeometry = new THREE.InstancedBufferGeometry();
     const baseSphereGeometry = new THREE.SphereGeometry(0.08, 8, 8);
@@ -712,8 +738,126 @@ const BlackHolePortfolio = () => {
   // Spring configuration for UI elements
   const springConfig = { stiffness: 100, damping: 30, mass: 0.8 };
 
+  // Cursor color based on phase
+  const getCursorColor = () => {
+    switch (journeyPhase) {
+      case 'approach':
+        return { primary: '#FF2182', secondary: 'rgba(255, 33, 130, 0.3)' };
+      case 'skills':
+        return { primary: '#a78bfa', secondary: 'rgba(167, 139, 250, 0.3)' };
+      case 'horizon':
+        return { primary: '#FF2182', secondary: 'rgba(255, 33, 130, 0.3)' };
+      case 'inside':
+        return { primary: '#c084fc', secondary: 'rgba(192, 132, 252, 0.3)' };
+      case 'singularity':
+        return { primary: '#ffffff', secondary: 'rgba(255, 255, 255, 0.3)' };
+      default:
+        return { primary: '#FF2182', secondary: 'rgba(255, 33, 130, 0.3)' };
+    }
+  };
+
+  const cursorColors = getCursorColor();
+
   return (
-    <div ref={containerRef} className="relative w-full bg-black" style={{ height: '500vh' }}>
+    <>
+      {/* Custom Glowing Orb Cursor */}
+      <motion.div
+        className="custom-cursor pointer-events-none fixed z-[9999] mix-blend-screen hidden md:block"
+        animate={{
+          x: cursorPosition.x - 10,
+          y: cursorPosition.y - 10,
+          scale: isHovering ? 1.5 : 1,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 500,
+          damping: 28,
+          mass: 0.5,
+        }}
+        style={{
+          left: 0,
+          top: 0,
+        }}
+      >
+        {/* Outer Halo - Animated Ring */}
+        <motion.div
+          className="absolute inset-0 rounded-full"
+          animate={{
+            scale: [1, 1.8, 1],
+            opacity: [0.6, 0.2, 0.6],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          style={{
+            width: '20px',
+            height: '20px',
+            border: `2px solid ${cursorColors.primary}`,
+            boxShadow: `0 0 20px ${cursorColors.secondary}, 0 0 40px ${cursorColors.secondary}`,
+          }}
+        />
+
+        {/* Middle Halo */}
+        <motion.div
+          className="absolute inset-0 rounded-full"
+          animate={{
+            scale: [1, 1.4, 1],
+            opacity: [0.4, 0.1, 0.4],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 0.3,
+          }}
+          style={{
+            width: '20px',
+            height: '20px',
+            border: `1px solid ${cursorColors.primary}`,
+            boxShadow: `0 0 15px ${cursorColors.secondary}`,
+          }}
+        />
+
+        {/* Core Orb */}
+        <motion.div
+          className="absolute rounded-full"
+          animate={{
+            scale: isHovering ? 1.2 : 1,
+          }}
+          transition={{
+            duration: 0.3,
+          }}
+          style={{
+            width: '20px',
+            height: '20px',
+            backgroundColor: cursorColors.primary,
+            boxShadow: `0 0 10px ${cursorColors.primary}, 0 0 20px ${cursorColors.primary}, 0 0 30px ${cursorColors.secondary}`,
+          }}
+        />
+
+        {/* Inner Bright Dot */}
+        <motion.div
+          className="absolute rounded-full"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [1, 0.6, 1],
+          }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          style={{
+            width: '20px',
+            height: '20px',
+            background: `radial-gradient(circle, ${cursorColors.primary} 0%, transparent 70%)`,
+          }}
+        />
+      </motion.div>
+
+      <div ref={containerRef} className="relative w-full bg-black" style={{ height: '500vh' }}>
       {/* 3D Scene */}
       <div className="fixed top-0 left-0 w-full h-screen z-0">
         <div ref={canvasRef} className="w-full h-full" />
@@ -896,6 +1040,8 @@ const BlackHolePortfolio = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.1, duration: 0.6 }}
+                    onMouseEnter={() => setIsHovering(true)}
+                    onMouseLeave={() => setIsHovering(false)}
                     className="bg-black/70 backdrop-blur-xl border border-[#FF2182]/30 rounded-lg p-4 sm:p-5 lg:p-6"
                   >
                     <h3 className="text-lg sm:text-xl lg:text-2xl font-black text-[#FF2182] mb-3 sm:mb-4">{category.title}</h3>
@@ -928,6 +1074,8 @@ const BlackHolePortfolio = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.05, duration: 0.4 }}
                     whileHover={{ scale: 1.02, borderColor: '#FF2182' }}
+                    onMouseEnter={() => setIsHovering(true)}
+                    onMouseLeave={() => setIsHovering(false)}
                     className="bg-black/70 backdrop-blur-xl border border-[#FF2182]/30 rounded-lg p-4 sm:p-5 lg:p-6 cursor-pointer transition-all"
                     onClick={() => setSelectedProject(project)}
                   >
@@ -1036,6 +1184,8 @@ const BlackHolePortfolio = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 1 + idx * 0.1, duration: 0.5 }}
                         whileHover={{ scale: 1.05, borderColor: '#FF2182' }}
+                        onMouseEnter={() => setIsHovering(true)}
+                        onMouseLeave={() => setIsHovering(false)}
                         className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 lg:p-5 border border-violet-500/50 hover:border-violet-500 bg-black/50 rounded-lg transition-all"
                       >
                         <item.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#FF2182] flex-shrink-0" />
@@ -1054,6 +1204,8 @@ const BlackHolePortfolio = () => {
                     onClick={() => window.location.href = 'mailto:nooratallah1999@gmail.com'}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onMouseEnter={() => setIsHovering(true)}
+                    onMouseLeave={() => setIsHovering(false)}
                     className="w-full py-4 sm:py-5 bg-gradient-to-r from-[#FF2182] to-violet-500 text-black font-black text-lg sm:text-xl lg:text-2xl uppercase rounded-lg"
                   >
                     START PROJECT
@@ -1083,6 +1235,8 @@ const BlackHolePortfolio = () => {
               >
                 <button
                   onClick={() => setSelectedProject(null)}
+                  onMouseEnter={() => setIsHovering(true)}
+                  onMouseLeave={() => setIsHovering(false)}
                   className="absolute top-4 right-4 sm:top-6 sm:right-6 text-white/60 hover:text-white text-2xl sm:text-3xl"
                 >
                   ✕
@@ -1115,6 +1269,8 @@ const BlackHolePortfolio = () => {
                   href={selectedProject.link}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onMouseEnter={() => setIsHovering(true)}
+                  onMouseLeave={() => setIsHovering(false)}
                   className="block w-full py-3 sm:py-4 bg-gradient-to-r from-[#FF2182] to-violet-500 text-black text-center font-black text-lg sm:text-xl uppercase rounded-lg flex items-center justify-center gap-3 hover:shadow-2xl hover:shadow-[#FF2182]/50 transition-all"
                 >
                   Visit Site
@@ -1151,6 +1307,26 @@ const BlackHolePortfolio = () => {
 
       {/* Custom Scrollbar Styles */}
       <style jsx global>{`
+        /* Hide default cursor */
+        * {
+          cursor: none !important;
+        }
+
+        /* Mobile: show default cursor */
+        @media (max-width: 768px) {
+          * {
+            cursor: auto !important;
+          }
+          .custom-cursor {
+            display: none !important;
+          }
+        }
+
+        /* Hover detection for interactive elements */
+        a, button, [role="button"], .cursor-pointer {
+          position: relative;
+        }
+
         .custom-scrollbar::-webkit-scrollbar {
           width: 8px;
         }
@@ -1176,6 +1352,7 @@ const BlackHolePortfolio = () => {
         }
       `}</style>
     </div>
+    </>
   );
 };
 
