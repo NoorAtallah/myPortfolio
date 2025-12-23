@@ -85,13 +85,15 @@ const BlackHolePortfolio = () => {
     camera.position.set(0, 20, 80);
 
     const renderer = new THREE.WebGLRenderer({ 
-      antialias: true,
+      antialias: window.innerWidth > 768, // Only enable antialiasing on larger screens
       powerPreference: 'high-performance',
       stencil: false,
       depth: true,
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Use lower pixel ratio on mobile for better performance
+    const isMobile = window.innerWidth < 768;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
     
     // Clear any existing canvas
     while (canvasRef.current.firstChild) {
@@ -173,7 +175,8 @@ const BlackHolePortfolio = () => {
     scene.add(accretionDisk);
 
     // Optimized particles spiraling into black hole
-    const particleCount = 2000;
+  
+    const particleCount = isMobile ? 1000 : 2000; // Reduce particles on mobile
     const particlesGeometry = new THREE.InstancedBufferGeometry();
     const baseSphereGeometry = new THREE.SphereGeometry(0.08, 8, 8);
     particlesGeometry.index = baseSphereGeometry.index;
@@ -283,7 +286,7 @@ const BlackHolePortfolio = () => {
 
     // Stars with instancing
     const starsGeometry = new THREE.BufferGeometry();
-    const starCount = 2000;
+    const starCount = isMobile ? 1000 : 2000; // Reduce stars on mobile
     const starsPositions = new Float32Array(starCount * 3);
     const starsColors = new Float32Array(starCount * 3);
     const originalStarsColors = new Float32Array(starCount * 3);
@@ -475,9 +478,11 @@ const BlackHolePortfolio = () => {
     animate();
 
     const handleResize = () => {
+      const newIsMobile = window.innerWidth < 768;
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, newIsMobile ? 1.5 : 2));
     };
 
     window.addEventListener('resize', handleResize);
@@ -733,7 +738,7 @@ const BlackHolePortfolio = () => {
       <div className="fixed top-0 left-0 w-full h-screen z-10 pointer-events-none">
         
         {/* Phase Title */}
-        <div className="absolute top-12 left-1/2 -translate-x-1/2 text-center">
+        <div className="absolute top-8 sm:top-12 left-1/2 -translate-x-1/2 text-center px-4 w-full">
           <motion.div
             key={journeyPhase}
             initial={{ opacity: 0, y: -20 }}
@@ -752,11 +757,11 @@ const BlackHolePortfolio = () => {
               transition={{ 
                 textShadow: { duration: 2, repeat: Infinity, ease: 'easeInOut' }
               }}
-              className={`text-7xl md:text-9xl font-black transition-colors duration-700 ${phaseInfo.color}`}
+              className={`text-4xl sm:text-6xl md:text-7xl lg:text-9xl font-black transition-colors duration-700 ${phaseInfo.color}`}
             >
               {phaseInfo.title}
             </motion.h1>
-            <p className="text-white/60 text-xl mt-4 transition-opacity duration-700">
+            <p className="text-white/60 text-sm sm:text-base md:text-xl mt-2 sm:mt-4 transition-opacity duration-700">
               {phaseInfo.subtitle}
             </p>
           </motion.div>
@@ -767,9 +772,9 @@ const BlackHolePortfolio = () => {
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute left-8 top-1/2 -translate-y-1/2"
+          className="hidden md:block absolute left-4 lg:left-8 top-1/2 -translate-y-1/2"
         >
-          <div className="relative w-2 h-[70vh] bg-white/10 rounded-full overflow-hidden">
+          <div className="relative w-2 h-[50vh] md:h-[60vh] lg:h-[70vh] bg-white/10 rounded-full overflow-hidden">
             <motion.div
               style={{ 
                 height: useSpring(
@@ -796,23 +801,23 @@ const BlackHolePortfolio = () => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute right-8 top-12"
+          className="absolute right-4 sm:right-6 lg:right-8 top-8 sm:top-12 flex sm:flex-col gap-2 sm:gap-4"
         >
           <motion.div 
-            className="bg-black/70 backdrop-blur-xl border border-[#FF2182]/30 rounded-lg p-6 min-w-[200px]"
+            className="bg-black/70 backdrop-blur-xl border border-[#FF2182]/30 rounded-lg p-3 sm:p-4 lg:p-6 min-w-[100px] sm:min-w-[160px] lg:min-w-[200px]"
             whileHover={{ scale: 1.05, borderColor: 'rgba(255, 33, 130, 0.5)' }}
             transition={{ duration: 0.3 }}
           >
-            <div className="text-[#FF2182]/60 text-xs uppercase tracking-wider mb-2">
+            <div className="text-[#FF2182]/60 text-[10px] sm:text-xs uppercase tracking-wider mb-1 sm:mb-2">
               Time Dilation
             </div>
             <motion.div 
-              className="text-[#FF2182] text-4xl font-black font-mono mb-1"
+              className="text-[#FF2182] text-xl sm:text-2xl lg:text-4xl font-black font-mono mb-0 sm:mb-1"
             >
               {(timeSpeed * 100).toFixed(0)}%
             </motion.div>
             <motion.div 
-              className="text-white/40 text-xs"
+              className="text-white/40 text-[10px] sm:text-xs hidden sm:block"
             >
               {timeSpeed < 0.3 ? 'Time nearly frozen' : timeSpeed < 0.7 ? 'Time slowing' : 'Normal flow'}
             </motion.div>
@@ -820,28 +825,28 @@ const BlackHolePortfolio = () => {
 
           {/* Distance */}
           <motion.div 
-            className="bg-black/70 backdrop-blur-xl border border-[#FF2182]/30 rounded-lg p-6 mt-4"
+            className="bg-black/70 backdrop-blur-xl border border-[#FF2182]/30 rounded-lg p-3 sm:p-4 lg:p-6 min-w-[100px] sm:min-w-[160px] lg:min-w-[200px]"
             whileHover={{ scale: 1.05, borderColor: 'rgba(255, 33, 130, 0.5)' }}
             transition={{ duration: 0.3 }}
           >
-            <div className="text-[#FF2182]/60 text-xs uppercase tracking-wider mb-2">
+            <div className="text-[#FF2182]/60 text-[10px] sm:text-xs uppercase tracking-wider mb-1 sm:mb-2">
               Distance
             </div>
-            <motion.div className="text-[#FF2182] text-4xl font-black font-mono">
+            <motion.div className="text-[#FF2182] text-xl sm:text-2xl lg:text-4xl font-black font-mono">
               {cameraDistance.get().toFixed(1)}km
             </motion.div>
           </motion.div>
 
           {/* Redshift */}
           <motion.div 
-            className="bg-black/70 backdrop-blur-xl border border-violet-500/30 rounded-lg p-6 mt-4"
+            className="hidden sm:block bg-black/70 backdrop-blur-xl border border-violet-500/30 rounded-lg p-3 sm:p-4 lg:p-6 min-w-[100px] sm:min-w-[160px] lg:min-w-[200px]"
             whileHover={{ scale: 1.05, borderColor: 'rgba(139, 92, 246, 0.5)' }}
             transition={{ duration: 0.3 }}
           >
-            <div className="text-violet-400/60 text-xs uppercase tracking-wider mb-2">
+            <div className="text-violet-400/60 text-[10px] sm:text-xs uppercase tracking-wider mb-1 sm:mb-2">
               Redshift
             </div>
-            <motion.div className="text-violet-400 text-4xl font-black font-mono">
+            <motion.div className="text-violet-400 text-xl sm:text-2xl lg:text-4xl font-black font-mono">
               {(redshift.get() * 100).toFixed(0)}%
             </motion.div>
           </motion.div>
@@ -854,17 +859,17 @@ const BlackHolePortfolio = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
-            className="absolute bottom-12 left-1/2 -translate-x-1/2"
+            className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2"
           >
             <motion.div
               animate={{ y: [0, 20, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
               className="text-center"
             >
-              <div className="text-[#FF2182] text-sm uppercase tracking-wider mb-2">
+              <div className="text-[#FF2182] text-xs sm:text-sm uppercase tracking-wider mb-2">
                 Scroll to descend
               </div>
-              <div className="text-6xl">↓</div>
+              <div className="text-4xl sm:text-6xl">↓</div>
             </motion.div>
           </motion.div>
         )}
@@ -878,9 +883,9 @@ const BlackHolePortfolio = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute bottom-20 left-1/2 -translate-x-1/2 w-full max-w-6xl px-8 pointer-events-auto"
+              className="absolute bottom-16 sm:bottom-20 left-1/2 -translate-x-1/2 w-full max-w-6xl px-4 sm:px-6 lg:px-8 pointer-events-auto"
             >
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
                 {[
                   { title: 'Frontend', skills: ['React.js', 'Next.js', 'Three.js', 'Tailwind CSS', 'Framer Motion'] },
                   { title: 'Backend', skills: ['Node.js', 'Express', 'MongoDB', 'PostgreSQL', 'REST APIs'] },
@@ -891,12 +896,12 @@ const BlackHolePortfolio = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.1, duration: 0.6 }}
-                    className="bg-black/70 backdrop-blur-xl border border-[#FF2182]/30 rounded-lg p-6"
+                    className="bg-black/70 backdrop-blur-xl border border-[#FF2182]/30 rounded-lg p-4 sm:p-5 lg:p-6"
                   >
-                    <h3 className="text-2xl font-black text-[#FF2182] mb-4">{category.title}</h3>
-                    <div className="space-y-2">
+                    <h3 className="text-lg sm:text-xl lg:text-2xl font-black text-[#FF2182] mb-3 sm:mb-4">{category.title}</h3>
+                    <div className="space-y-1.5 sm:space-y-2">
                       {category.skills.map((skill, i) => (
-                        <div key={i} className="text-white/70 text-sm">{skill}</div>
+                        <div key={i} className="text-white/70 text-xs sm:text-sm">{skill}</div>
                       ))}
                     </div>
                   </motion.div>
@@ -913,9 +918,9 @@ const BlackHolePortfolio = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute bottom-20 left-1/2 -translate-x-1/2 w-full max-w-6xl px-8 pointer-events-auto"
+              className="absolute bottom-16 sm:bottom-20 left-1/2 -translate-x-1/2 w-full max-w-6xl px-4 sm:px-6 lg:px-8 pointer-events-auto"
             >
-              <div className="grid md:grid-cols-2 gap-4 max-h-[60vh] overflow-y-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 max-h-[50vh] sm:max-h-[60vh] overflow-y-auto custom-scrollbar">
                 {projects.map((project, idx) => (
                   <motion.div
                     key={project.id}
@@ -923,13 +928,13 @@ const BlackHolePortfolio = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.05, duration: 0.4 }}
                     whileHover={{ scale: 1.02, borderColor: '#FF2182' }}
-                    className="bg-black/70 backdrop-blur-xl border border-[#FF2182]/30 rounded-lg p-6 cursor-pointer transition-all"
+                    className="bg-black/70 backdrop-blur-xl border border-[#FF2182]/30 rounded-lg p-4 sm:p-5 lg:p-6 cursor-pointer transition-all"
                     onClick={() => setSelectedProject(project)}
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="text-xl font-bold text-white">{project.title}</h3>
+                    <div className="flex items-start justify-between mb-2 gap-2">
+                      <h3 className="text-base sm:text-lg lg:text-xl font-bold text-white flex-1">{project.title}</h3>
                       {project.status && (
-                        <span className={`px-2 py-1 rounded text-xs font-bold uppercase tracking-wider ${
+                        <span className={`px-2 py-0.5 sm:py-1 rounded text-[10px] sm:text-xs font-bold uppercase tracking-wider whitespace-nowrap ${
                           project.status === 'Live' 
                             ? 'bg-green-500/20 text-green-400' 
                             : project.status === 'Development'
@@ -940,7 +945,7 @@ const BlackHolePortfolio = () => {
                         </span>
                       )}
                     </div>
-                    <p className="text-violet-400 text-sm">{project.type} • {project.location}</p>
+                    <p className="text-violet-400 text-xs sm:text-sm">{project.type} • {project.location}</p>
                   </motion.div>
                 ))}
               </div>
@@ -955,12 +960,12 @@ const BlackHolePortfolio = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center px-4"
             >
-              <div className="text-purple-400 text-2xl font-light mb-4">
+              <div className="text-purple-400 text-lg sm:text-xl lg:text-2xl font-light mb-3 sm:mb-4">
                 Spacetime has inverted
               </div>
-              <div className="text-white/40 text-lg">
+              <div className="text-white/40 text-base sm:text-lg">
                 All paths lead to the singularity
               </div>
             </motion.div>
@@ -974,10 +979,10 @@ const BlackHolePortfolio = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-xl pointer-events-auto px-8"
+              className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-xl pointer-events-auto px-4 sm:px-6 lg:px-8"
             >
               <div className="max-w-4xl w-full">
-                <div className="text-center mb-12">
+                <div className="text-center mb-8 sm:mb-12">
                   <motion.div
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{
@@ -994,7 +999,7 @@ const BlackHolePortfolio = () => {
                       opacity: { duration: 1, ease: [0.22, 1, 0.36, 1] },
                       textShadow: { duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }
                     }}
-                    className="text-white text-9xl font-black mb-8"
+                    className="text-white text-6xl sm:text-7xl lg:text-9xl font-black mb-6 sm:mb-8"
                   >
                     ∞
                   </motion.div>
@@ -1002,7 +1007,7 @@ const BlackHolePortfolio = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                    className="text-white text-4xl font-light mb-4"
+                    className="text-white text-2xl sm:text-3xl lg:text-4xl font-light mb-3 sm:mb-4"
                   >
                     SINGULARITY REACHED
                   </motion.div>
@@ -1010,14 +1015,14 @@ const BlackHolePortfolio = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                    className="text-white/60 text-xl mb-12"
+                    className="text-white/60 text-base sm:text-lg lg:text-xl mb-8 sm:mb-12"
                   >
                     Let's connect at the core
                   </motion.div>
                 </div>
 
-                <div className="bg-black/90 border-4 border-[#FF2182] rounded-lg p-12">
-                  <div className="grid md:grid-cols-2 gap-4 mb-10">
+                <div className="bg-black/90 border-2 sm:border-4 border-[#FF2182] rounded-lg p-6 sm:p-8 lg:p-12">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-10">
                     {[
                       { icon: Mail, label: 'Email', value: 'nooratallah1999@gmail.com', link: 'mailto:nooratallah1999@gmail.com' },
                       { icon: Phone, label: 'Phone', value: '+962 786 075 693', link: 'tel:+962786075693' },
@@ -1031,12 +1036,12 @@ const BlackHolePortfolio = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 1 + idx * 0.1, duration: 0.5 }}
                         whileHover={{ scale: 1.05, borderColor: '#FF2182' }}
-                        className="flex items-center gap-4 p-5 border-2 border-violet-500/50 hover:border-violet-500 bg-black/50 rounded-lg transition-all"
+                        className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 lg:p-5 border border-violet-500/50 hover:border-violet-500 bg-black/50 rounded-lg transition-all"
                       >
-                        <item.icon className="w-6 h-6 text-[#FF2182]" />
-                        <div>
-                          <div className="text-xs text-[#FF2182] uppercase tracking-wider">{item.label}</div>
-                          <div className="text-white/90 text-sm">{item.value}</div>
+                        <item.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#FF2182] flex-shrink-0" />
+                        <div className="min-w-0">
+                          <div className="text-[10px] sm:text-xs text-[#FF2182] uppercase tracking-wider">{item.label}</div>
+                          <div className="text-white/90 text-xs sm:text-sm truncate">{item.value}</div>
                         </div>
                       </motion.a>
                     ))}
@@ -1049,7 +1054,7 @@ const BlackHolePortfolio = () => {
                     onClick={() => window.location.href = 'mailto:nooratallah1999@gmail.com'}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="w-full py-5 bg-gradient-to-r from-[#FF2182] to-violet-500 text-black font-black text-2xl uppercase rounded-lg"
+                    className="w-full py-4 sm:py-5 bg-gradient-to-r from-[#FF2182] to-violet-500 text-black font-black text-lg sm:text-xl lg:text-2xl uppercase rounded-lg"
                   >
                     START PROJECT
                   </motion.button>
@@ -1074,19 +1079,19 @@ const BlackHolePortfolio = () => {
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
                 onClick={(e) => e.stopPropagation()}
-                className="max-w-2xl w-full mx-8 bg-black/90 border-4 border-[#FF2182] rounded-lg p-12 relative"
+                className="max-w-2xl w-full mx-4 sm:mx-6 lg:mx-8 bg-black/90 border-2 sm:border-4 border-[#FF2182] rounded-lg p-6 sm:p-8 lg:p-12 relative"
               >
                 <button
                   onClick={() => setSelectedProject(null)}
-                  className="absolute top-6 right-6 text-white/60 hover:text-white text-3xl"
+                  className="absolute top-4 right-4 sm:top-6 sm:right-6 text-white/60 hover:text-white text-2xl sm:text-3xl"
                 >
                   ✕
                 </button>
 
-                <div className="flex items-start justify-between mb-4">
-                  <h3 className="text-4xl font-black text-[#FF2182]">{selectedProject.title}</h3>
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 sm:mb-4 gap-2">
+                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#FF2182] pr-8 sm:pr-0">{selectedProject.title}</h3>
                   {selectedProject.status && (
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap self-start ${
                       selectedProject.status === 'Live' 
                         ? 'bg-green-500/20 text-green-400 border border-green-500/50' 
                         : selectedProject.status === 'Development'
@@ -1098,10 +1103,10 @@ const BlackHolePortfolio = () => {
                   )}
                 </div>
                 
-                <p className="text-violet-400 text-lg mb-4">{selectedProject.type} • {selectedProject.location}</p>
+                <p className="text-violet-400 text-base sm:text-lg mb-3 sm:mb-4">{selectedProject.type} • {selectedProject.location}</p>
                 
                 {selectedProject.description && (
-                  <p className="text-white/60 text-base mb-8 leading-relaxed">
+                  <p className="text-white/60 text-sm sm:text-base mb-6 sm:mb-8 leading-relaxed">
                     {selectedProject.description}
                   </p>
                 )}
@@ -1110,10 +1115,10 @@ const BlackHolePortfolio = () => {
                   href={selectedProject.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full py-4 bg-gradient-to-r from-[#FF2182] to-violet-500 text-black text-center font-black text-xl uppercase rounded-lg flex items-center justify-center gap-3 hover:shadow-2xl hover:shadow-[#FF2182]/50 transition-all"
+                  className="block w-full py-3 sm:py-4 bg-gradient-to-r from-[#FF2182] to-violet-500 text-black text-center font-black text-lg sm:text-xl uppercase rounded-lg flex items-center justify-center gap-3 hover:shadow-2xl hover:shadow-[#FF2182]/50 transition-all"
                 >
                   Visit Site
-                  <ExternalLink className="w-6 h-6" />
+                  <ExternalLink className="w-5 h-5 sm:w-6 sm:h-6" />
                 </a>
               </motion.div>
             </motion.div>
@@ -1125,7 +1130,7 @@ const BlackHolePortfolio = () => {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 0.6, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center"
+          className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 text-center px-4"
         >
           <motion.p 
             key={journeyPhase}
@@ -1133,7 +1138,7 @@ const BlackHolePortfolio = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-[#FF2182]/50 text-sm font-mono"
+            className="text-[#FF2182]/50 text-xs sm:text-sm font-mono"
           >
             {journeyPhase === 'approach' && 'Gravitational pull increasing'}
             {journeyPhase === 'skills' && 'Approaching event horizon'}
@@ -1143,6 +1148,33 @@ const BlackHolePortfolio = () => {
           </motion.p>
         </motion.div>
       </div>
+
+      {/* Custom Scrollbar Styles */}
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 8px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0.3);
+          border-radius: 4px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #FF2182 0%, #8b5cf6 100%);
+          border-radius: 4px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(180deg, #ff3399 0%, #9d6cff 100%);
+        }
+        
+        /* Firefox */
+        .custom-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: #FF2182 rgba(0, 0, 0, 0.3);
+        }
+      `}</style>
     </div>
   );
 };
