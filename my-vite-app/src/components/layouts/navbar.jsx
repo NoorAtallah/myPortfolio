@@ -49,10 +49,10 @@ const Header = () => {
   // Navigation Links
   const navLinks = [
     { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
+    // { name: "About", href: "#about" },
     { name: "Projects", href: "#projects" },
     { name: "Skills", href: "#skills" },
-    { name: "Experience", href: "#experience" },
+    // { name: "Experience", href: "#experience" },
     { name: "Contact", href: "#contact" }
   ];
 
@@ -107,11 +107,7 @@ const Header = () => {
               className="ml-4 p-2 rounded-full bg-black/30 border border-white/10 text-[#FF9EFF] hover:bg-[#FF9EFF]/20 transition-all duration-300"
               aria-label="Toggle Dark Mode"
             >
-              {darkMode ? (
-                <Sun size={18} className="text-[#FF9EFF]" />
-              ) : (
-                <Moon size={18} className="text-[#FF9EFF]" />
-              )}
+          
             </motion.button>
           </nav>
 
@@ -126,11 +122,7 @@ const Header = () => {
               className="mr-2 p-2 rounded-full bg-black/30 border border-white/10 text-[#FF9EFF]"
               aria-label="Toggle Dark Mode"
             >
-              {darkMode ? (
-                <Sun size={18} className="text-[#FF9EFF]" />
-              ) : (
-                <Moon size={18} className="text-[#FF9EFF]" />
-              )}
+           
             </motion.button>
 
             {/* Menu Toggle Button */}

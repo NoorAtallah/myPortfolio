@@ -9,12 +9,9 @@ function App() {
 
   return (
     <>
-<Header />
+
 <Hero />
-<Projects />
-<Skills />
-<Contact />
-<Footer />
+
     
     
     </>
