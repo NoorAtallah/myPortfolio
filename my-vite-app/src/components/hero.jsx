@@ -523,14 +523,141 @@ const BlackHolePortfolio = () => {
   }, [cameraDistance, redshift, timeSpeed]);
 
   const projects = [
-    { id: 1, title: 'CalculateYourRefund', type: 'Tax Platform', location: 'Canada', link: 'https://calculateyourrefund.com/' },
-    { id: 2, title: 'CodeLake', type: 'Web Dev', location: 'Canada', link: 'https://code-five-eta.vercel.app/' },
-    { id: 3, title: 'RoyalDelta', type: 'Trading', location: 'Canada', link: 'https://royald.vercel.app/' },
-    { id: 4, title: 'Riverside', type: 'Travel', location: 'Canada', link: 'https://www.riversidejourneys.com/' },
-    { id: 5, title: 'CasaDiConsiglio', type: 'Legal', location: 'UAE', link: 'https://casadiconsiglio.com/' },
-    { id: 6, title: 'Topaz', type: 'VPS', location: 'Jordan', link: 'https://www.topaz-technology.com/' },
-    { id: 7, title: 'SHAAS', type: 'AI Solutions', location: 'UAE', link: 'https://shaas-e17x.vercel.app/' },
-    { id: 8, title: 'DolceELuce', type: 'Beauty', location: 'USA', link: 'https://www.dolceelucesalon.com/' },
+    { 
+      id: 1, 
+      title: 'CalculateYourRefund', 
+      type: 'Tax Platform', 
+      location: 'Canada', 
+      link: 'https://calculateyourrefund.com/',
+      description: 'Streamlined web app for quick and easy tax refund calculations',
+      status: 'Live'
+    },
+    { 
+      id: 2, 
+      title: 'CodeLake', 
+      type: 'Web Dev Services', 
+      location: 'Canada', 
+      link: 'https://code-five-eta.vercel.app/',
+      description: 'Web development services website',
+      status: 'Live'
+    },
+    { 
+      id: 3, 
+      title: 'RoyalDelta', 
+      type: 'Trading & Investment', 
+      location: 'Canada', 
+      link: 'https://royald.vercel.app/',
+      description: 'Corporate website for a global trading and investment company',
+      status: 'Live'
+    },
+    { 
+      id: 4, 
+      title: 'Riverside Journeys', 
+      type: 'Travel Agency', 
+      location: 'Canada', 
+      link: 'https://www.riversidejourneys.com/',
+      description: 'Travel agency focused on immersive global experiences',
+      status: 'Live'
+    },
+    { 
+      id: 5, 
+      title: 'AccountLink CPA', 
+      type: 'Accounting & Tax', 
+      location: 'Canada', 
+      link: 'https://www.accountlinkcpa.com/',
+      description: 'Professional platform for accounting and tax services',
+      status: 'Live'
+    },
+    { 
+      id: 6, 
+      title: 'CoreDigital360', 
+      type: 'Marketing & Software', 
+      location: 'Jordan', 
+      link: 'https://www.coredigital360.com/',
+      description: 'Marketing and software services company',
+      status: 'Live'
+    },
+    { 
+      id: 7, 
+      title: 'Keifna', 
+      type: 'Food Manufacturing', 
+      location: 'Jordan', 
+      link: 'https://www.keifna.com/',
+      description: 'Instant coffee & dough factory website',
+      status: 'Live'
+    },
+    { 
+      id: 8, 
+      title: 'Gamma Drones', 
+      type: 'E-Commerce', 
+      location: 'Canada', 
+      link: 'https://gamma-woad.vercel.app/',
+      description: 'Drone products e-commerce platform',
+      status: 'Live'
+    },
+    { 
+      id: 9, 
+      title: 'Casa Di Consiglio', 
+      type: 'Law Firm', 
+      location: 'UAE', 
+      link: 'https://casadiconsiglio.com/',
+      description: 'Professional law firm website',
+      status: 'Live'
+    },
+    { 
+      id: 10, 
+      title: 'Topaz Technology', 
+      type: 'VPS Hosting', 
+      location: 'Jordan', 
+      link: 'https://www.topaz-technology.com/',
+      description: 'VPS hosting company',
+      status: 'Development'
+    },
+    { 
+      id: 11, 
+      title: 'MAR United', 
+      type: 'E-Commerce', 
+      location: 'UAE', 
+      link: 'https://www.mar-united.ae/',
+      description: 'E-commerce for Dead Sea products',
+      status: 'Development'
+    },
+    { 
+      id: 12, 
+      title: 'Dolce e Luce', 
+      type: 'Beauty Salon', 
+      location: 'USA', 
+      link: 'https://www.dolceelucesalon.com/',
+      description: 'Professional salon website',
+      status: 'Development'
+    },
+    { 
+      id: 13, 
+      title: 'SHAAS', 
+      type: 'AI Solutions', 
+      location: 'UAE', 
+      link: 'https://shaas-e17x.vercel.app/',
+      description: 'AI-powered website solutions',
+      status: 'Development'
+    },
+    { 
+      id: 14, 
+      title: 'Task2 Demo', 
+      type: 'Portfolio Demo', 
+      location: 'Demo', 
+      link: 'https://task2-azure-zeta.vercel.app/',
+      description: 'Demo website showcase',
+      status: 'Demo'
+    },
+    { 
+      id: 15, 
+      title: 'Law Firm Demo', 
+      type: 'Portfolio Demo', 
+      location: 'Demo', 
+      link: 'https://law-firm-mu-liart.vercel.app/',
+      description: 'Law firm template demo',
+      status: 'Demo'
+    },
   ];
 
   const getPhaseInfo = () => {
@@ -799,7 +926,20 @@ const BlackHolePortfolio = () => {
                     className="bg-black/70 backdrop-blur-xl border border-[#FF2182]/30 rounded-lg p-6 cursor-pointer transition-all"
                     onClick={() => setSelectedProject(project)}
                   >
-                    <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="text-xl font-bold text-white">{project.title}</h3>
+                      {project.status && (
+                        <span className={`px-2 py-1 rounded text-xs font-bold uppercase tracking-wider ${
+                          project.status === 'Live' 
+                            ? 'bg-green-500/20 text-green-400' 
+                            : project.status === 'Development'
+                            ? 'bg-yellow-500/20 text-yellow-400'
+                            : 'bg-blue-500/20 text-blue-400'
+                        }`}>
+                          {project.status}
+                        </span>
+                      )}
+                    </div>
                     <p className="text-violet-400 text-sm">{project.type} • {project.location}</p>
                   </motion.div>
                 ))}
@@ -943,8 +1083,28 @@ const BlackHolePortfolio = () => {
                   ✕
                 </button>
 
-                <h3 className="text-4xl font-black text-[#FF2182] mb-4">{selectedProject.title}</h3>
-                <p className="text-violet-400 text-lg mb-8">{selectedProject.type} • {selectedProject.location}</p>
+                <div className="flex items-start justify-between mb-4">
+                  <h3 className="text-4xl font-black text-[#FF2182]">{selectedProject.title}</h3>
+                  {selectedProject.status && (
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+                      selectedProject.status === 'Live' 
+                        ? 'bg-green-500/20 text-green-400 border border-green-500/50' 
+                        : selectedProject.status === 'Development'
+                        ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/50'
+                        : 'bg-blue-500/20 text-blue-400 border border-blue-500/50'
+                    }`}>
+                      {selectedProject.status}
+                    </span>
+                  )}
+                </div>
+                
+                <p className="text-violet-400 text-lg mb-4">{selectedProject.type} • {selectedProject.location}</p>
+                
+                {selectedProject.description && (
+                  <p className="text-white/60 text-base mb-8 leading-relaxed">
+                    {selectedProject.description}
+                  </p>
+                )}
 
                 <a
                   href={selectedProject.link}
